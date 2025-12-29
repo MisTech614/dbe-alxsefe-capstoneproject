@@ -1,4 +1,9 @@
 import { useMemo, useState } from "react";
+import { useExercises } from "../store/useExercises";
+const exercises = useExercises((s) => s.exercises);
+const loading = useExercises((s) => s.loading);
+const error = useExercises((s) => s.error);
+
 
 const EXERCISES = [
   { name: "Bench Press", muscleGroup: "Chest" },
