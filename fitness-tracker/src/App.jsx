@@ -1,13 +1,14 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import WorkoutLog from "./components/WorkoutLog";
 import WorkoutHistory from "./components/WorkoutHistory";
 import ExerciseSearch from "./components/ExerciseSearch";
 import ProgressOverview from "./components/ProgressOverview";
 import { useWorkouts } from "./store/useWorkouts";
+import { useExercises } from "./store/useExercises"; // Added store for WGER API
 
 function Panel({ title, subtitle, children }) {
   return (
-    <section className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-indigo-400">
+    <section className="w-full rounded-3xl border border-slate-200 bg-white px-5 py-5 shadow-sm ring-1 ring-black/5">
       <div className="mb-4">
         <h2 className="text-lg font-semibold text-slate-900">{title}</h2>
         {subtitle ? <p className="mt-1 text-sm text-slate-500">{subtitle}</p> : null}
@@ -19,9 +20,9 @@ function Panel({ title, subtitle, children }) {
 
 function StatCard({ icon, label, value, sub }) {
   return (
-    <div className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-indigo-400">
+    <div className="w-full rounded-3xl border border-slate-200 bg-white px-5 py-5 shadow-sm ring-1 ring-black/5">
       <div className="flex items-center gap-3">
-        <div className="grid h-10 w-10 place-items-center rounded-xl bg-indigo-50 text-indigo-700">
+        <div className="grid h-10 w-10 place-items-center rounded-2xl bg-indigo-50 text-indigo-700">
           {icon}
         </div>
         <div className="text-sm font-medium text-slate-600">{label}</div>
@@ -34,11 +35,23 @@ function StatCard({ icon, label, value, sub }) {
 
 export default function App() {
   const workouts = useWorkouts((s) => s.workouts);
+
+  // the WGER API state
+  const fetchExercises = useExercises((s) => s.fetchExercises);
+  const apiLoading = useExercises((s) => s.loading);
+  const apiError = useExercises((s) => s.error);
+
+  // local UI state
   const [selectedExercise, setSelectedExercise] = useState(null);
+
+  // fetch exercise catalog once
+  useEffect(() => {
+    fetchExercises({ limit: 200 });
+  }, [fetchExercises]);
 
   const prefill = useMemo(() => {
     if (!selectedExercise) return null;
-    return { name: selectedExercise.name, muscleGroup: selectedExercise.muscleGroup };
+    return { name: selectedExercise.name, muscleGroup: selectedExercise.muscleGroup || "Other" };
   }, [selectedExercise]);
 
   const total = workouts.length;
@@ -78,23 +91,31 @@ export default function App() {
           </div>
 
           <nav className="flex flex-wrap gap-2">
-            <a className="rounded-xl bg-white/15 px-4 py-2 text-sm font-medium text-white ring-1 ring-white/20 hover:bg-white/20">
+            <span className="rounded-xl bg-white/15 px-4 py-2 text-sm font-medium text-white ring-1 ring-white/20">
               Home
-            </a>
-            <a className="rounded-xl bg-white/10 px-4 py-2 text-sm font-medium text-white/90 ring-1 ring-white/15 hover:bg-white/15">
+            </span>
+            <span className="rounded-xl bg-white/10 px-4 py-2 text-sm font-medium text-white/90 ring-1 ring-white/15">
               Log Workout
-            </a>
-            <a className="rounded-xl bg-white/10 px-4 py-2 text-sm font-medium text-white/90 ring-1 ring-white/15 hover:bg-white/15">
+            </span>
+            <span className="rounded-xl bg-white/10 px-4 py-2 text-sm font-medium text-white/90 ring-1 ring-white/15">
               History
-            </a>
-            <a className="rounded-xl bg-white/10 px-4 py-2 text-sm font-medium text-white/90 ring-1 ring-white/15 hover:bg-white/15">
+            </span>
+            <span className="rounded-xl bg-white/10 px-4 py-2 text-sm font-medium text-white/90 ring-1 ring-white/15">
               Progress
-            </a>
+            </span>
           </nav>
         </div>
       </header>
 
       <main className="mx-auto max-w-6xl px-4 py-8">
+        {/* API error handling aspect */}
+        {apiError && (
+          <div className="mb-6 rounded-3xl bg-rose-50 px-5 py-4 text-sm text-rose-800 ring-1 ring-rose-100">
+            <div className="font-semibold">Exercise data could not be loaded</div>
+            <div className="mt-1">{apiError}</div>
+          </div>
+        )}
+
         {/* Hero */}
         <section className="rounded-3xl bg-gradient-to-r from-indigo-600 via-purple-600 to-fuchsia-600 p-7 text-white shadow-sm">
           <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
@@ -133,7 +154,14 @@ export default function App() {
           </div>
 
           <div className="space-y-6">
-            <Panel title="Exercise Search" subtitle="Search by name or muscle group and add to your workout.">
+            <Panel
+              title="Exercise Search"
+              subtitle={
+                apiLoading
+                  ? "Loading exercises from WGER…"
+                  : "Search by name or muscle group and add to your workout."
+              }
+            >
               <ExerciseSearch onSelectExercise={setSelectedExercise} />
             </Panel>
 
