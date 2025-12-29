@@ -6,9 +6,10 @@ import ProgressOverview from "./components/ProgressOverview";
 import { useWorkouts } from "./store/useWorkouts";
 import { useExercises } from "./store/useExercises"; // Added store for WGER API
 
-function Panel({ title, subtitle, children }) {
+function Panel({ id,title, subtitle, children }) {
   return (
-    <section className="w-full rounded-3xl border border-slate-200 bg-white px-5 py-5 shadow-sm ring-1 ring-black/5">
+    <section id={id} //Adding the id aspect to incorporate navigation in the homepage
+             className="w-full rounded-3xl border border-slate-200 bg-white px-5 py-5 shadow-sm ring-1 ring-black/5">
       <div className="mb-4">
         <h2 className="text-lg font-semibold text-slate-900">{title}</h2>
         {subtitle ? <p className="mt-1 text-sm text-slate-500">{subtitle}</p> : null}
@@ -94,15 +95,25 @@ export default function App() {
             <span className="rounded-xl bg-white/15 px-4 py-2 text-sm font-medium text-white ring-1 ring-white/20">
               Home
             </span>
-            <span className="rounded-xl bg-white/10 px-4 py-2 text-sm font-medium text-white/90 ring-1 ring-white/15">
-              Log Workout
-            </span>
-            <span className="rounded-xl bg-white/10 px-4 py-2 text-sm font-medium text-white/90 ring-1 ring-white/15">
+            {/*added clickable aspect by making the top navigation buttons scroll*/}
+            <button
+                 onClick={() => document.getElementById("log-workout")?.scrollIntoView({ behavior: "smooth" })}
+                 className="rounded-xl bg-white/10 px-4 py-2 text-sm font-medium text-white/90 ring-1 ring-white/15 hover:bg-white/15"
+             >
+              Log Workout 
+            </button> 
+            <button
+                onClick={() => document.getElementById("history")?.scrollIntoView({ behavior: "smooth" })}
+                className="rounded-xl bg-white/10 px-4 py-2 text-sm font-medium text-white/90 ring-1 ring-white/15 hover:bg-white/15"
+             > 
               History
-            </span>
-            <span className="rounded-xl bg-white/10 px-4 py-2 text-sm font-medium text-white/90 ring-1 ring-white/15">
+            </button>
+            <button
+               onClick={() => document.getElementById("progress")?.scrollIntoView({ behavior: "smooth" })}
+              className="rounded-xl bg-white/10 px-4 py-2 text-sm font-medium text-white/90 ring-1 ring-white/15 hover:bg-white/15"
+             >
               Progress
-            </span>
+            </button>
           </nav>
         </div>
       </header>
@@ -144,11 +155,15 @@ export default function App() {
         {/* Content */}
         <section className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
           <div className="space-y-6">
-            <Panel title="Log Workout" subtitle="Add exercises with sets, reps, and weights (saved with timestamp).">
+            <Panel id="log-workout" 
+                   title="Log Workout" 
+                   subtitle="Add exercises with sets, reps, and weights (saved with timestamp).">
               <WorkoutLog prefillExercise={prefill} />
             </Panel>
 
-            <Panel title="Progress" subtitle="Summary + bar trends (no chart library).">
+            <Panel id="progress" 
+                   title="Progress" 
+                   subtitle="Summary + bar trends (no chart library).">
               <ProgressOverview />
             </Panel>
           </div>
@@ -165,7 +180,9 @@ export default function App() {
               <ExerciseSearch onSelectExercise={setSelectedExercise} />
             </Panel>
 
-            <Panel title="History" subtitle="Filter by date or exercise, then expand to view details.">
+            <Panel id="history" 
+                   title="History" 
+                   subtitle="Filter by date or exercise, then expand to view details.">
               <WorkoutHistory />
             </Panel>
           </div>

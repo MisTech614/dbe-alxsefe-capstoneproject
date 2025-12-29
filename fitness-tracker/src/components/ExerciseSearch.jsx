@@ -1,8 +1,5 @@
 import { useMemo, useState } from "react";
 import { useExercises } from "../store/useExercises";
-const exercises = useExercises((s) => s.exercises);
-const loading = useExercises((s) => s.loading);
-const error = useExercises((s) => s.error);
 
 
 const EXERCISES = [
@@ -22,6 +19,10 @@ const EXERCISES = [
 ];
 
 export default function ExerciseSearch({ onSelectExercise }) {
+  const exercises = useExercises((s) => s.exercises);
+  const loading = useExercises((s) => s.loading);
+  const error = useExercises((s) => s.error);
+  
   const [query, setQuery] = useState("");
   const [muscle, setMuscle] = useState("All");
 
