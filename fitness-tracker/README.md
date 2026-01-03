@@ -1,16 +1,7 @@
-# React + Vite
+Project Summary FitTrack is a responsive fitness tracker web application built using React, Vite, Tailwind CSS, and Zustand. The application allows users to log workouts, view workout history, track fitness progress, and search exercises using real-world data from the WGER API. The project was developed as part of the Capstone Project for ALX SEFE and demonstrates practical front-end engineering skills, including component-based design, state management, API integration, and responsive UI development.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Key Features • Log workouts with exercises, sets, reps, and weights • Persist workout data using local storage • View workout history organized by date • Track progress through calculated fitness metrics • Search exercises by name or muscle group • Fetch exercise data dynamically from the WGER API • Responsive design optimized for desktop and mobile
 
-Currently, two official plugins are available:
+Technical Overview • React Hooks (useState, useEffect) manage local UI state and side effects • Zustand handles global state for workouts and exercise data • Tailwind CSS ensures consistent, responsive styling • API integration includes loading and error handling for reliability
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Learning Outcome This project strengthened my understanding of modern front-end development, particularly API-driven applications, global state management, and debugging React hook issues. It reflects real-world challenges and showcases my ability to build scalable, user-focused web applications.
